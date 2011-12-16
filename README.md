@@ -93,3 +93,13 @@ var resampled = SRC.resample({
 });
 
 ```
+
+## History / Credits
+
+src.js is a module originally designed to extend similar existing functionality of [sink.js](https://github.com/jussi-kalliokoski/sink.js), but turned out to be a better idea as a stand-alone library. A lot of the inspiration is drawn from the [Secret Rabbit Code](http://www.mega-nerd.com/SRC/), so check that out if you need a similar library for native stuff.
+
+Brought to you by [ofmlabs](http://ofmlabs.org)!
+
+## License
+
+src.js is work under MIT license.
