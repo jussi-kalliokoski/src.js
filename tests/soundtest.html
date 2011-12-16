@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../scripts/sink.js"></script>
+	<script src="../lib/src.js"></script>
+	<script>
+var phase = 0, sampleRate = 20000;
+
+window.onload = function(){
+	var dev = Sink();
+	con = SRC.Callback({
+		ratio: sampleRate / dev.sampleRate,
+		channelCount: dev.channelCount,
+		quality: SRC.LINEAR,
+	});
+	dev.on('audioprocess', con.callback);
+	dev.on('audioprocess', function checkNaN(buffer){
+/*
+		var start = null, i;
+		for (i=0; i<buffer.length; i++) {
+			if (start === null && isNaN(buffer[i]) || !buffer[i]) {
+				start = i;
+			} else if (start !== null && !(isNaN(buffer[i] || !buffer[i]))) {
+				return console.log(start, i);
+			}
+		}
+		start !== null && console.log(start, i);
+*/
+	});
+	con.on('audioprocess', function (buffer, channelCount) {
+		var i, n;
+
+		/*i = buffer.length;
+		while (i--) buffer[i] = Math.random() - 0.5;
+		return;*/
+
+		for (i=0; i<buffer.length; i+=channelCount){
+			phase		= (phase + 440 / sampleRate / 2) % 1;
+			for (n=0; n<channelCount; n++){
+				buffer[i+n]	= Math.sin(phase * Math.PI * 2) * 0.5;
+			}
+		}
+	});
+};
+	</script>
+</head>
+<body>
+</body>
+</html>
