@@ -102,4 +102,4 @@ Brought to you by [ofmlabs](http://ofmlabs.org)!
 
 ## License
 
-src.js is work under MIT license.
+src.js is work under BSD license.
