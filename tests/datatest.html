@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../lib/src.js"></script>
+</head>
+<body>
+	<canvas id="c" width="800" height="600"></canvas>
+	<script>
+var	c	= document.getElementById('c'),
+	ctx	= c.getContext('2d'),
+	w	= c.width,
+	h	= c.height;
+
+function draw (quality, ratio) {
+
+	var channelCount = 2;
+
+	var	p = 0,
+		l = 100,
+		s = 4 / l;
+
+	var con = SRC.Callback({
+		ratio: ratio,
+		channelCount: channelCount,
+		quality: quality,
+		bufferSize: 16,
+	});
+
+	con.on('audioprocess', function (buffer, channelCount) {
+		var i;
+
+		for (i=0; i<buffer.length; i+=channelCount) {
+			buffer[ i ] = 1 - p;
+			buffer[i+1] = p - 1;
+			p += s;
+		}
+	});
+
+	var buffer = new Float32Array(l);
+
+	con.callback(buffer, channelCount);
+
+	var i, n;
+
+	ctx.clearRect(0, 0, w, h);
+
+	ctx.save();
+
+	ctx.strokeStyle = 'green';
+	ctx.beginPath();
+	ctx.moveTo(0, 0);
+	ctx.lineTo(w, h);
+	ctx.moveTo(0, h);
+	ctx.lineTo(w, 0);
+	ctx.stroke();
+	ctx.strokeStyle = 'black';
+
+	ctx.translate(0, h / 2);
+
+	ctx.beginPath();
+	ctx.moveTo(0, 0);
+	ctx.stroke();
+
+	for (n=0; n<channelCount; n++) {
+		ctx.beginPath();
+		ctx.moveTo(0, -buffer[i] * h / 2);
+
+		for (i=channelCount+n; i<l; i+=channelCount) {
+			ctx.lineTo((i - n) / l * w, -buffer[i] * h / 2);
+		}
+
+		ctx.stroke();
+	}
+
+	ctx.restore();
+
+	console.dir(con);
+}
+
+draw(SRC.LINEAR, 1.1);
+	</script>
+</body>
+</html>
