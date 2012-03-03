@@ -4,7 +4,7 @@
 	<script src="../scripts/sink.min.js"></script>
 	<script src="../lib/src.js"></script>
 	<script>
-var phase = 0, sampleRate = 20000;
+var p1 = 0, p2 = 0, sampleRate = 20000;
 
 window.onload = function(){
 	var dev = Sink();
@@ -35,10 +35,10 @@ window.onload = function(){
 		return;*/
 
 		for (i=0; i<buffer.length; i+=channelCount){
-			phase		= (phase + 440 / sampleRate / 2) % 1;
-			for (n=0; n<channelCount; n++){
-				buffer[i+n]	= Math.sin(phase * Math.PI * 2) * 0.5;
-			}
+			p1		= (p1 + 440 / sampleRate / 2) % 1;
+			p2		= (p2 + 660 / sampleRate / 2) % 1;
+			buffer[ i ]	= Math.sin(p1 * Math.PI * 2) * 0.5;
+			buffer[i+1]	= Math.sin(p2 * Math.PI * 2) * 0.5;
 		}
 	});
 };
